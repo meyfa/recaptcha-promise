@@ -10,8 +10,14 @@ Google and the Google Logo are registered trademarks of Google Inc.
 
 ## Usage
 
+```
+npm install --save recaptcha-promise
+```
+
 ```javascript
-var recaptcha = require("recaptcha-promise").init({
+var recaptcha = require("recaptcha-promise");
+
+recaptcha.init({
     secret_key: "YOUR_SECRET_KEY"
 });
 
