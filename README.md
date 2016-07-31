@@ -21,6 +21,7 @@ recaptcha.init({
     secret_key: "YOUR_SECRET_KEY"
 });
 
+// remote_address is optional
 recaptcha(user_response, remote_address).then(function (success) {
     console.log(success ? "Response valid" : "Response invalid");
 });
