@@ -8,18 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JangoBrick/recaptcha-promise.git"
+    "url": "git+https://github.com/meyfa/recaptcha-promise.git"
   },
   "keywords": [
     "recaptcha",
     "promise"
   ],
-  "author": "JangoBrick",
+  "author": "Fabian Meyer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JangoBrick/recaptcha-promise/issues"
+    "url": "https://github.com/meyfa/recaptcha-promise/issues"
   },
-  "homepage": "https://github.com/JangoBrick/recaptcha-promise",
+  "homepage": "https://github.com/meyfa/recaptcha-promise",
   "dependencies": {
     "bluebird": "^3.4.1",
     "request": "^2.73.0"
