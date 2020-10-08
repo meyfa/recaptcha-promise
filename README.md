@@ -51,15 +51,14 @@ handleRequest(/* ... */)
 ### The global instance
 
 This exists mostly for legacy reasons. If you do not want to dependency-inject
-the `RecaptchaVerify` object, you can configure this package with your secret
-key globally:
+a custom object, you can configure this package with your secret key globally:
 
 ```js
 // note the missing .create(...) call
 const recaptcha = require('recaptcha-promise')
 
 recaptcha.init({
-  secret: 'YOUR_SECRET_KEY'
+  secret: 'YOUR_SECRET_KEY' // secret_key and secretKey are also valid
 })
 ```
 
