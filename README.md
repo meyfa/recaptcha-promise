@@ -1,5 +1,7 @@
 # recaptcha-promise
 
+[![Build Status](https://travis-ci.com/meyfa/recaptcha-promise.svg?branch=master)](https://travis-ci.com/meyfa/recaptcha-promise)
+
 This Node module aims to provide simple, asynchronous, promise-based ReCAPTCHA
 response verification.
 
