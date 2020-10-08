@@ -23,8 +23,7 @@
   },
   "homepage": "https://github.com/meyfa/recaptcha-promise",
   "dependencies": {
-    "bluebird": "^3.4.1",
-    "request": "^2.73.0"
+    "axios": "^0.20.0"
   },
   "devDependencies": {
     "standard": "^14.3.4"
