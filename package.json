@@ -4,7 +4,9 @@
   "description": "Node module for promise-based ReCAPTCHA verification",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint",
+    "lint": "standard",
+    "lint-fix": "standard --fix"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
   "dependencies": {
     "bluebird": "^3.4.1",
     "request": "^2.73.0"
+  },
+  "devDependencies": {
+    "standard": "^14.3.4"
   }
 }
