@@ -1,6 +1,6 @@
 {
   "name": "recaptcha-promise",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "Node module for promise-based ReCAPTCHA verification",
   "main": "index.js",
   "scripts": {
