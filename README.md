@@ -19,10 +19,6 @@ npm install recaptcha-promise
 
 ## Usage
 
-**UPDATE NOTICE**: If you are currently using version 0.x of this package, fear
-not! Everything still works the same in this version. Nonetheless, if you do
-have the time, consider upgrading to the newer usage patterns.
-
 ### Creating an instance
 
 This is the recommended way. First, an instance is created with your secret key.
