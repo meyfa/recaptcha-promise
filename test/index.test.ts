@@ -2,7 +2,7 @@ import assert from 'assert'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
-import recaptcha from '../'
+import recaptcha from '../index'
 import { after } from 'mocha'
 
 describe('main export', function () {
@@ -25,7 +25,7 @@ describe('main export', function () {
     it('rejects if unconfigured, does not perform requests', async function () {
       // @ts-expect-error
       recaptcha.init({ secret: undefined }) // reset secret
-      return await assert.rejects(() => recaptcha.verify('foo')).then(() => {
+      return await assert.rejects(async () => await recaptcha.verify('foo')).then(() => {
         assert.strictEqual(mock.history.post.length, 0)
       })
     })
@@ -58,16 +58,16 @@ describe('main export', function () {
 
     it('resolves with success value', async function () {
       recaptcha.init({ secret: 'test-secret' })
-      return await Promise.resolve().then(() => {
+      return await Promise.resolve().then(async () => {
         // case 1
         mock.onAny().replyOnce(200, { success: true })
-        return recaptcha.verify('foo').then((result) => {
+        return await recaptcha.verify('foo').then((result) => {
           assert.strictEqual(result, true)
         })
-      }).then(() => {
+      }).then(async () => {
         // case 2
         mock.onAny().replyOnce(200, { success: false })
-        return recaptcha.verify('foo').then((result) => {
+        return await recaptcha.verify('foo').then((result) => {
           assert.strictEqual(result, false)
         })
       })
@@ -89,30 +89,30 @@ describe('main export', function () {
     })
 
     it('does not distinguish between secret, secretKey, secret_key', async function () {
-      return await Promise.resolve().then(() => {
+      return await Promise.resolve().then(async () => {
         // case 1
         recaptcha.init({ secret: 'secret' })
         mock.onAny().replyOnce(config => {
           assert.strictEqual(config.data, 'secret=secret&response=foo&remoteip=bar')
           return [200, { success: true }]
         })
-        return recaptcha.verify('foo', 'bar')
-      }).then(() => {
+        return await recaptcha.verify('foo', 'bar')
+      }).then(async () => {
         // case 2
         recaptcha.init({ secretKey: 'secretKey' } as any)
         mock.onAny().replyOnce(config => {
           assert.strictEqual(config.data, 'secret=secretKey&response=foo&remoteip=bar')
           return [200, { success: true }]
         })
-        return recaptcha.verify('foo', 'bar')
-      }).then(() => {
+        return await recaptcha.verify('foo', 'bar')
+      }).then(async () => {
         // case 2
         recaptcha.init({ secret_key: 'secret_key' } as any)
         mock.onAny().replyOnce(config => {
           assert.strictEqual(config.data, 'secret=secret_key&response=foo&remoteip=bar')
           return [200, { success: true }]
         })
-        return recaptcha.verify('foo', 'bar')
+        return await recaptcha.verify('foo', 'bar')
       })
     })
   })
@@ -126,7 +126,7 @@ describe('main export', function () {
       // @ts-expect-error
       recaptcha.init({ secret: undefined }) // reset secret
       recaptcha.create({ secret: 'test-secret' })
-      return await assert.rejects(() => recaptcha.verify('foo'))
+      return await assert.rejects(async () => await recaptcha.verify('foo'))
     })
 
     describe('#verify()', function () {
@@ -138,7 +138,7 @@ describe('main export', function () {
 
       it('rejects if unconfigured, does not perform requests', async function () {
         const obj = recaptcha.create()
-        return await assert.rejects(() => obj.verify('foo')).then(() => {
+        return await assert.rejects(async () => await obj.verify('foo')).then(() => {
           assert.strictEqual(mock.history.post.length, 0)
         })
       })
@@ -187,14 +187,14 @@ describe('main export', function () {
         assert.doesNotThrow(() => obj.init({ secret: 'foo' }))
       })
 
-      it('allows re-configuration', function () {
+      it('allows re-configuration', async function () {
         const obj = recaptcha.create()
         obj.init({ secret: 'test-secret' })
         mock.onAny().replyOnce(config => {
           assert.strictEqual(config.data, 'secret=test-secret&response=foo&remoteip=bar')
           return [200, { success: true }]
         })
-        return obj.verify('foo', 'bar')
+        return await obj.verify('foo', 'bar')
       })
     })
   })
