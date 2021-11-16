@@ -1,6 +1,7 @@
 # recaptcha-promise
 
 [![CI](https://github.com/meyfa/recaptcha-promise/actions/workflows/main.yml/badge.svg)](https://github.com/meyfa/recaptcha-promise/actions/workflows/main.yml)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/daa5cc798bbd3d7f17d0/test_coverage)](https://codeclimate.com/github/meyfa/recaptcha-promise/test_coverage)
 
 This Node module aims to provide simple, asynchronous, promise-based ReCAPTCHA
 response verification. TypeScript type definitions are included.
