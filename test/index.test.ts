@@ -1,21 +1,19 @@
-/* global describe, it, beforeEach, afterEach */
-'use strict'
+import assert from 'assert'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
-const assert = require('assert')
-const MockAdapter = require('axios-mock-adapter')
-
-const recaptcha = require('../')
+import recaptcha from '../'
+import { after } from 'mocha'
 
 describe('main export', function () {
-  let mock
-
-  beforeEach(function () {
-    mock = new MockAdapter(require('axios'), { onNoMatch: 'throwException' })
-  })
+  const mock = new MockAdapter(axios, { onNoMatch: 'throwException' })
 
   afterEach(function () {
+    mock.reset()
+  })
+
+  after(function () {
     mock.restore()
-    mock = null
   })
 
   describe('#verify()', function () {
@@ -24,41 +22,43 @@ describe('main export', function () {
       assert(typeof recaptcha === 'function', 'is not a function')
     })
 
-    it('rejects if unconfigured, does not perform requests', function () {
+    it('rejects if unconfigured, does not perform requests', async function () {
+      // @ts-expect-error
       recaptcha.init({ secret: undefined }) // reset secret
-      return assert.rejects(() => recaptcha.verify('foo')).then(() => {
+      return await assert.rejects(() => recaptcha.verify('foo')).then(() => {
         assert.strictEqual(mock.history.post.length, 0)
       })
     })
 
-    it('performs a request with correct body if configured', function () {
+    it('performs a request with correct body if configured', async function () {
       recaptcha.init({ secret: 'test-secret' })
       mock.onAny().replyOnce(config => {
         assert.strictEqual(config.url, 'https://www.google.com/recaptcha/api/siteverify')
         assert.strictEqual(config.method, 'post')
         assert.strictEqual(config.data, 'secret=test-secret&response=foo&remoteip=bar')
-        assert.strictEqual(config.headers['Content-Type'], 'application/x-www-form-urlencoded')
+        const contentType = config.headers != null ? config.headers['Content-Type'] : undefined
+        assert.strictEqual(contentType, 'application/x-www-form-urlencoded')
         return [200, { success: true }]
       })
-      return Promise.resolve(recaptcha.verify('foo', 'bar')).then(() => {
+      return await Promise.resolve(recaptcha.verify('foo', 'bar')).then(() => {
         assert.strictEqual(mock.history.post.length, 1)
       })
     })
 
-    it('does not pass remoteip if left out', function () {
+    it('does not pass remoteip if left out', async function () {
       recaptcha.init({ secret: 'test-secret' })
       mock.onAny().replyOnce(config => {
         assert.strictEqual(config.data, 'secret=test-secret&response=foo&remoteip=')
         return [200, { success: true }]
       })
-      return Promise.resolve(recaptcha.verify('foo')).then(() => {
+      return await Promise.resolve(recaptcha.verify('foo')).then(() => {
         assert.strictEqual(mock.history.post.length, 1)
       })
     })
 
-    it('resolves with success value', function () {
+    it('resolves with success value', async function () {
       recaptcha.init({ secret: 'test-secret' })
-      return Promise.resolve().then(() => {
+      return await Promise.resolve().then(() => {
         // case 1
         mock.onAny().replyOnce(200, { success: true })
         return recaptcha.verify('foo').then((result) => {
@@ -76,8 +76,11 @@ describe('main export', function () {
 
   describe('#init()', function () {
     it('throws if passed nothing or not an object', function () {
+      // @ts-expect-error
       assert.throws(() => recaptcha.init())
+      // @ts-expect-error
       assert.throws(() => recaptcha.init(null))
+      // @ts-expect-error
       assert.throws(() => recaptcha.init('foo'))
     })
 
@@ -85,8 +88,8 @@ describe('main export', function () {
       assert.doesNotThrow(() => recaptcha.init({ secret: 'foo' }))
     })
 
-    it('does not distinguish between secret, secretKey, secret_key', function () {
-      return Promise.resolve().then(() => {
+    it('does not distinguish between secret, secretKey, secret_key', async function () {
+      return await Promise.resolve().then(() => {
         // case 1
         recaptcha.init({ secret: 'secret' })
         mock.onAny().replyOnce(config => {
@@ -96,7 +99,7 @@ describe('main export', function () {
         return recaptcha.verify('foo', 'bar')
       }).then(() => {
         // case 2
-        recaptcha.init({ secretKey: 'secretKey' })
+        recaptcha.init({ secretKey: 'secretKey' } as any)
         mock.onAny().replyOnce(config => {
           assert.strictEqual(config.data, 'secret=secretKey&response=foo&remoteip=bar')
           return [200, { success: true }]
@@ -104,7 +107,7 @@ describe('main export', function () {
         return recaptcha.verify('foo', 'bar')
       }).then(() => {
         // case 2
-        recaptcha.init({ secret_key: 'secret_key' })
+        recaptcha.init({ secret_key: 'secret_key' } as any)
         mock.onAny().replyOnce(config => {
           assert.strictEqual(config.data, 'secret=secret_key&response=foo&remoteip=bar')
           return [200, { success: true }]
@@ -119,10 +122,11 @@ describe('main export', function () {
       assert.doesNotThrow(() => recaptcha.create())
     })
 
-    it('leaves global instance unchanged', function () {
+    it('leaves global instance unchanged', async function () {
+      // @ts-expect-error
       recaptcha.init({ secret: undefined }) // reset secret
       recaptcha.create({ secret: 'test-secret' })
-      return assert.rejects(() => recaptcha.verify('foo'))
+      return await assert.rejects(() => recaptcha.verify('foo'))
     })
 
     describe('#verify()', function () {
@@ -132,34 +136,35 @@ describe('main export', function () {
         assert(typeof obj === 'function', 'is not a function')
       })
 
-      it('rejects if unconfigured, does not perform requests', function () {
+      it('rejects if unconfigured, does not perform requests', async function () {
         const obj = recaptcha.create()
-        return assert.rejects(() => obj.verify('foo')).then(() => {
+        return await assert.rejects(() => obj.verify('foo')).then(() => {
           assert.strictEqual(mock.history.post.length, 0)
         })
       })
 
-      it('is independent between instances', function () {
+      it('is independent between instances', async function () {
+        // @ts-expect-error
         recaptcha.init({ secret: undefined }) // reset secret
         const instance1 = recaptcha.create({ secret: 'secret1' })
         const instance2 = recaptcha.create({ secret: 'secret2' })
-        return Promise.resolve().then(() => {
+        return await Promise.resolve().then(async () => {
           // case 1
           mock.onAny().replyOnce(config => {
             assert.strictEqual(config.data, 'secret=secret1&response=foo1&remoteip=bar1')
             return [200, { success: true }]
           })
-          return Promise.resolve(instance1.verify('foo1', 'bar1')).then(() => {
+          return await Promise.resolve(instance1.verify('foo1', 'bar1')).then(() => {
             assert.strictEqual(mock.history.post.length, 1)
           })
-        }).then(() => {
+        }).then(async () => {
           // case 2
           mock.reset()
           mock.onAny().replyOnce(config => {
             assert.strictEqual(config.data, 'secret=secret2&response=foo2&remoteip=bar2')
             return [200, { success: true }]
           })
-          return Promise.resolve(instance2.verify('foo2', 'bar2')).then(() => {
+          return await Promise.resolve(instance2.verify('foo2', 'bar2')).then(() => {
             assert.strictEqual(mock.history.post.length, 1)
           })
         })
@@ -169,8 +174,11 @@ describe('main export', function () {
     describe('#init()', function () {
       it('throws if passed nothing or not an object', function () {
         const obj = recaptcha.create()
+        // @ts-expect-error
         assert.throws(() => obj.init())
+        // @ts-expect-error
         assert.throws(() => obj.init(null))
+        // @ts-expect-error
         assert.throws(() => obj.init('foo'))
       })
 

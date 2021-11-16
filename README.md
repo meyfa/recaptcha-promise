@@ -3,7 +3,7 @@
 [![CI](https://github.com/meyfa/recaptcha-promise/actions/workflows/main.yml/badge.svg)](https://github.com/meyfa/recaptcha-promise/actions/workflows/main.yml)
 
 This Node module aims to provide simple, asynchronous, promise-based ReCAPTCHA
-response verification.
+response verification. TypeScript type definitions are included.
 
 _This software is in no way affiliated with or endorsed by Google._
 
