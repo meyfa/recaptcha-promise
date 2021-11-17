@@ -25,9 +25,8 @@ describe('main export', function () {
     it('rejects if unconfigured, does not perform requests', async function () {
       // @ts-expect-error
       recaptcha.init({ secret: undefined }) // reset secret
-      return await assert.rejects(async () => await recaptcha.verify('foo')).then(() => {
-        assert.strictEqual(mock.history.post.length, 0)
-      })
+      await assert.rejects(async () => await recaptcha.verify('foo'))
+      assert.strictEqual(mock.history.post.length, 0)
     })
 
     it('performs a request with correct body if configured', async function () {
@@ -40,9 +39,8 @@ describe('main export', function () {
         assert.strictEqual(contentType, 'application/x-www-form-urlencoded')
         return [200, { success: true }]
       })
-      return await Promise.resolve(recaptcha.verify('foo', 'bar')).then(() => {
-        assert.strictEqual(mock.history.post.length, 1)
-      })
+      await recaptcha.verify('foo', 'bar')
+      assert.strictEqual(mock.history.post.length, 1)
     })
 
     it('does not pass remoteip if left out', async function () {
@@ -51,26 +49,18 @@ describe('main export', function () {
         assert.strictEqual(config.data, 'secret=test-secret&response=foo&remoteip=')
         return [200, { success: true }]
       })
-      return await Promise.resolve(recaptcha.verify('foo')).then(() => {
-        assert.strictEqual(mock.history.post.length, 1)
-      })
+      await recaptcha.verify('foo')
+      assert.strictEqual(mock.history.post.length, 1)
     })
 
     it('resolves with success value', async function () {
       recaptcha.init({ secret: 'test-secret' })
-      return await Promise.resolve().then(async () => {
-        // case 1
-        mock.onAny().replyOnce(200, { success: true })
-        return await recaptcha.verify('foo').then((result) => {
-          assert.strictEqual(result, true)
-        })
-      }).then(async () => {
-        // case 2
-        mock.onAny().replyOnce(200, { success: false })
-        return await recaptcha.verify('foo').then((result) => {
-          assert.strictEqual(result, false)
-        })
-      })
+      // case 1
+      mock.onAny().replyOnce(200, { success: true })
+      assert.strictEqual(await recaptcha.verify('foo'), true)
+      // case 2
+      mock.onAny().replyOnce(200, { success: false })
+      assert.strictEqual(await recaptcha.verify('foo'), false)
     })
   })
 
@@ -89,31 +79,29 @@ describe('main export', function () {
     })
 
     it('does not distinguish between secret, secretKey, secret_key', async function () {
-      return await Promise.resolve().then(async () => {
-        // case 1
-        recaptcha.init({ secret: 'secret' })
-        mock.onAny().replyOnce(config => {
-          assert.strictEqual(config.data, 'secret=secret&response=foo&remoteip=bar')
-          return [200, { success: true }]
-        })
-        return await recaptcha.verify('foo', 'bar')
-      }).then(async () => {
-        // case 2
-        recaptcha.init({ secretKey: 'secretKey' } as any)
-        mock.onAny().replyOnce(config => {
-          assert.strictEqual(config.data, 'secret=secretKey&response=foo&remoteip=bar')
-          return [200, { success: true }]
-        })
-        return await recaptcha.verify('foo', 'bar')
-      }).then(async () => {
-        // case 2
-        recaptcha.init({ secret_key: 'secret_key' } as any)
-        mock.onAny().replyOnce(config => {
-          assert.strictEqual(config.data, 'secret=secret_key&response=foo&remoteip=bar')
-          return [200, { success: true }]
-        })
-        return await recaptcha.verify('foo', 'bar')
+      // case 1
+      recaptcha.init({ secret: 'secret' })
+      mock.onAny().replyOnce(config => {
+        assert.strictEqual(config.data, 'secret=secret&response=foo&remoteip=bar')
+        return [200, { success: true }]
       })
+      await recaptcha.verify('foo', 'bar')
+
+      // case 2
+      recaptcha.init({ secretKey: 'secretKey' } as any)
+      mock.onAny().replyOnce(config => {
+        assert.strictEqual(config.data, 'secret=secretKey&response=foo&remoteip=bar')
+        return [200, { success: true }]
+      })
+      await recaptcha.verify('foo', 'bar')
+
+      // case 2
+      recaptcha.init({ secret_key: 'secret_key' } as any)
+      mock.onAny().replyOnce(config => {
+        assert.strictEqual(config.data, 'secret=secret_key&response=foo&remoteip=bar')
+        return [200, { success: true }]
+      })
+      await recaptcha.verify('foo', 'bar')
     })
   })
 
@@ -138,9 +126,8 @@ describe('main export', function () {
 
       it('rejects if unconfigured, does not perform requests', async function () {
         const obj = recaptcha.create()
-        return await assert.rejects(async () => await obj.verify('foo')).then(() => {
-          assert.strictEqual(mock.history.post.length, 0)
-        })
+        await assert.rejects(async () => await obj.verify('foo'))
+        assert.strictEqual(mock.history.post.length, 0)
       })
 
       it('is independent between instances', async function () {
@@ -148,26 +135,23 @@ describe('main export', function () {
         recaptcha.init({ secret: undefined }) // reset secret
         const instance1 = recaptcha.create({ secret: 'secret1' })
         const instance2 = recaptcha.create({ secret: 'secret2' })
-        return await Promise.resolve().then(async () => {
-          // case 1
-          mock.onAny().replyOnce(config => {
-            assert.strictEqual(config.data, 'secret=secret1&response=foo1&remoteip=bar1')
-            return [200, { success: true }]
-          })
-          return await Promise.resolve(instance1.verify('foo1', 'bar1')).then(() => {
-            assert.strictEqual(mock.history.post.length, 1)
-          })
-        }).then(async () => {
-          // case 2
-          mock.reset()
-          mock.onAny().replyOnce(config => {
-            assert.strictEqual(config.data, 'secret=secret2&response=foo2&remoteip=bar2')
-            return [200, { success: true }]
-          })
-          return await Promise.resolve(instance2.verify('foo2', 'bar2')).then(() => {
-            assert.strictEqual(mock.history.post.length, 1)
-          })
+
+        // case 1
+        mock.onAny().replyOnce(config => {
+          assert.strictEqual(config.data, 'secret=secret1&response=foo1&remoteip=bar1')
+          return [200, { success: true }]
         })
+        await instance1.verify('foo1', 'bar1')
+        assert.strictEqual(mock.history.post.length, 1)
+
+        // case 2
+        mock.reset()
+        mock.onAny().replyOnce(config => {
+          assert.strictEqual(config.data, 'secret=secret2&response=foo2&remoteip=bar2')
+          return [200, { success: true }]
+        })
+        await instance2.verify('foo2', 'bar2')
+        assert.strictEqual(mock.history.post.length, 1)
       })
     })
 
@@ -194,7 +178,7 @@ describe('main export', function () {
           assert.strictEqual(config.data, 'secret=test-secret&response=foo&remoteip=bar')
           return [200, { success: true }]
         })
-        return await obj.verify('foo', 'bar')
+        await obj.verify('foo', 'bar')
       })
     })
   })
