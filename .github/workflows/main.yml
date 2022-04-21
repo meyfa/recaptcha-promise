@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
 
 jobs:
@@ -13,14 +13,15 @@ jobs:
     strategy:
       matrix:
         node-version:
-        - 16
+          - 16
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run lint
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
 
   test:
     name: test - Node.js ${{ matrix.node-version }}
@@ -28,29 +29,30 @@ jobs:
     strategy:
       matrix:
         node-version:
-        - 16
-        - 14
-        - 12
+          - 16
+          - 14
+          - 12
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm test
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
 
   coverage:
-    needs: [ test ]
     name: Coverage
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@master
-      with:
-        node-version: 16
-    - run: npm ci
-    - uses: paambaati/codeclimate-action@v3.0.0
-      env:
-        CC_TEST_REPORTER_ID: 62670eb7bd9bc3141713e1612c93f26c2ed41d6a2a7bce55fa44e99864969914
-      with:
-        coverageCommand: npm run coverage
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+      - run: npm ci
+      - uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: 62670eb7bd9bc3141713e1612c93f26c2ed41d6a2a7bce55fa44e99864969914
+        with:
+          coverageCommand: npm run coverage
