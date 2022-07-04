@@ -1,5 +1,3 @@
-extends:
-  - standard-with-typescript
-
+extends: '@meyfa/eslint-config'
 parserOptions:
   project: './tsconfig.eslint.json'
