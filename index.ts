@@ -82,8 +82,8 @@ function createInstance (config?: RecaptchaVerifierConfig): RecaptchaVerifier {
       throw new Error('secret not configured')
     }
     const postBody = querystring.stringify({
-      secret: secret,
-      response: response,
+      secret,
+      response,
       remoteip: remoteAddress ?? undefined
     })
     const { data } = await axios.post(VERIFY_ENDPOINT, postBody)
