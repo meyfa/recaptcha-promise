@@ -13,8 +13,8 @@
     "test": "mocha --require ts-node/register --recursive \"test/**/*.test.*\"",
     "lint": "tsc --noEmit && eslint --ignore-path .gitignore .",
     "lint-fix": "tsc --noEmit && eslint --fix --ignore-path .gitignore .",
-    "coverage": "c8 --reporter=lcov npm test",
-    "prepare": "npm run build"
+    "coverage": "c8 --reporter=text --reporter=lcov npm test",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
