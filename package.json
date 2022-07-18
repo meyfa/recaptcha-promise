@@ -39,7 +39,7 @@
   "devDependencies": {
     "@meyfa/eslint-config": "2.0.0",
     "@types/mocha": "9.1.1",
-    "@types/node": "16.11.43",
+    "@types/node": "16.11.45",
     "axios-mock-adapter": "1.21.1",
     "c8": "7.11.3",
     "eslint": "8.19.0",
