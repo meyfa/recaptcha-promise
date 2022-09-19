@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["ES2018"],
     "target": "es2018",
     "module": "commonjs",
     "esModuleInterop": true,
@@ -12,5 +13,8 @@
     "test",
     "dist",
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "experimentalResolver": true
+  }
 }

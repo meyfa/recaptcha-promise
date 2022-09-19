@@ -1,10 +1,8 @@
-import { after } from 'mocha'
 import assert from 'assert'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
-// eslint-disable-next-line import/extensions
-import recaptcha from '../index'
+import recaptcha from '../index.js'
 
 describe('main export', function () {
   const mock = new MockAdapter(axios, { onNoMatch: 'throwException' })
