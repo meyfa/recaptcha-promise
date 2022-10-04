@@ -86,7 +86,11 @@ function createInstance (config?: RecaptchaVerifierConfig): RecaptchaVerifier {
       response,
       remoteip: remoteAddress ?? undefined
     })
-    const { data } = await axios.post(VERIFY_ENDPOINT, postBody)
+    const { data } = await axios.post(VERIFY_ENDPOINT, postBody, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
     return data.success
   }
 
