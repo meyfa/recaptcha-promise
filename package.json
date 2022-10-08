@@ -34,7 +34,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "axios": "^1.0.0"
+    "axios": "^1.1.2"
   },
   "devDependencies": {
     "@meyfa/eslint-config": "2.1.0",
