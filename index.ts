@@ -1,5 +1,4 @@
 import axios from 'axios'
-import querystring from 'querystring'
 
 /**
  * URL of the verification endpoint.
@@ -81,11 +80,11 @@ function createInstance (config?: RecaptchaVerifierConfig): RecaptchaVerifier {
     if (secret == null) {
       throw new Error('secret not configured')
     }
-    const postBody = querystring.stringify({
+    const postBody = new URLSearchParams({
       secret,
       response,
-      remoteip: remoteAddress ?? undefined
-    })
+      remoteip: remoteAddress ?? ''
+    }).toString()
     const { data } = await axios.post(VERIFY_ENDPOINT, postBody, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
