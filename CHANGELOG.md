@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2](https://github.com/meyfa/recaptcha-promise/compare/v2.0.1...v2.0.2) (2022-10-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to ^1.1.2 ([#79](https://github.com/meyfa/recaptcha-promise/issues/79)) ([6e70601](https://github.com/meyfa/recaptcha-promise/commit/6e7060109729554ba08b2e5d4ecc25a8c78d56cd))
+* Use URLSearchParams instead of querystring ([#77](https://github.com/meyfa/recaptcha-promise/issues/77)) ([99200cf](https://github.com/meyfa/recaptcha-promise/commit/99200cf8f882299865cc6b313c70f0a49909a77a))
+
 ## [2.0.1](https://github.com/meyfa/recaptcha-promise/compare/v2.0.0...v2.0.1) (2022-10-06)
 
 
