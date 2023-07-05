@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/meyfa/recaptcha-promise/compare/v2.0.2...v3.0.0) (2023-07-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop support for Node.js older than v18.16.1 ([#112](https://github.com/meyfa/recaptcha-promise/issues/112))
+
+### Miscellaneous Chores
+
+* Drop support for Node.js older than v18.16.1 ([#112](https://github.com/meyfa/recaptcha-promise/issues/112)) ([153a3ce](https://github.com/meyfa/recaptcha-promise/commit/153a3cedd285e7072b3e0bd8d9da08a0d0b1c262))
+
 ## [2.0.2](https://github.com/meyfa/recaptcha-promise/compare/v2.0.1...v2.0.2) (2022-10-08)
 
 
