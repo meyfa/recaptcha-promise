@@ -22,7 +22,7 @@ describe('main export', function () {
     })
 
     it('rejects if unconfigured, does not perform requests', async function () {
-      // @ts-expect-error
+      // @ts-expect-error - intentionally pass undefined
       recaptcha.init({ secret: undefined }) // reset secret
       await assert.rejects(async () => await recaptcha.verify('foo'))
       assert.strictEqual(mock.history.post.length, 0)
@@ -65,11 +65,11 @@ describe('main export', function () {
 
   describe('#init()', function () {
     it('throws if passed nothing or not an object', function () {
-      // @ts-expect-error
+      // @ts-expect-error - intentionally pass invalid values
       assert.throws(() => recaptcha.init())
-      // @ts-expect-error
+      // @ts-expect-error - intentionally pass invalid values
       assert.throws(() => recaptcha.init(null))
-      // @ts-expect-error
+      // @ts-expect-error - intentionally pass invalid values
       assert.throws(() => recaptcha.init('foo'))
     })
 
@@ -110,10 +110,10 @@ describe('main export', function () {
     })
 
     it('leaves global instance unchanged', async function () {
-      // @ts-expect-error
+      // @ts-expect-error - intentionally pass undefined
       recaptcha.init({ secret: undefined }) // reset secret
       recaptcha.create({ secret: 'test-secret' })
-      return await assert.rejects(async () => await recaptcha.verify('foo'))
+      await assert.rejects(async () => await recaptcha.verify('foo'))
     })
 
     describe('#verify()', function () {
@@ -130,7 +130,7 @@ describe('main export', function () {
       })
 
       it('is independent between instances', async function () {
-        // @ts-expect-error
+        // @ts-expect-error - intentionally pass undefined
         recaptcha.init({ secret: undefined }) // reset secret
         const instance1 = recaptcha.create({ secret: 'secret1' })
         const instance2 = recaptcha.create({ secret: 'secret2' })
@@ -157,11 +157,11 @@ describe('main export', function () {
     describe('#init()', function () {
       it('throws if passed nothing or not an object', function () {
         const obj = recaptcha.create()
-        // @ts-expect-error
+        // @ts-expect-error - intentionally pass invalid values
         assert.throws(() => obj.init())
-        // @ts-expect-error
+        // @ts-expect-error - intentionally pass invalid values
         assert.throws(() => obj.init(null))
-        // @ts-expect-error
+        // @ts-expect-error - intentionally pass invalid values
         assert.throws(() => obj.init('foo'))
       })
 
