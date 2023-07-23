@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/meyfa/recaptcha-promise/compare/v3.0.0...v3.0.1) (2023-07-23)
+
+
+### Miscellaneous Chores
+
+* Publish with provenance ([#118](https://github.com/meyfa/recaptcha-promise/issues/118)) ([4792788](https://github.com/meyfa/recaptcha-promise/commit/4792788806978841b7100d3bb1b4c02898b27399))
+
 ## [3.0.0](https://github.com/meyfa/recaptcha-promise/compare/v2.0.2...v3.0.0) (2023-07-05)
 
 
