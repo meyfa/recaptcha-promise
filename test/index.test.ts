@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'node:assert'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 
