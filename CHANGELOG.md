@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.2](https://github.com/meyfa/recaptcha-promise/compare/v3.0.1...v3.0.2) (2023-11-17)
+
+
+### Bug Fixes
+
+* Bump axios dependency range ([#145](https://github.com/meyfa/recaptcha-promise/issues/145)) ([0acca00](https://github.com/meyfa/recaptcha-promise/commit/0acca00901559d17bfd2ad7b31d9b47a8ae702f4))
+* **deps:** update dependency axios to v1.6.0 [security] ([#142](https://github.com/meyfa/recaptcha-promise/issues/142)) ([671f998](https://github.com/meyfa/recaptcha-promise/commit/671f9987cd79ec56815c18059740c9334f355347))
+
 ## [3.0.1](https://github.com/meyfa/recaptcha-promise/compare/v3.0.0...v3.0.1) (2023-07-23)
 
 
