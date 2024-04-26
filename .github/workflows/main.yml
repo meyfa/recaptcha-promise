@@ -46,7 +46,7 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - uses: paambaati/codeclimate-action@v5.0.0
+      - uses: paambaati/codeclimate-action@v6.0.0
         env:
           CC_TEST_REPORTER_ID: 62670eb7bd9bc3141713e1612c93f26c2ed41d6a2a7bce55fa44e99864969914
         with:
