@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/meyfa/recaptcha-promise/compare/v3.0.2...v3.1.0) (2024-07-21)
+
+
+### Features
+
+* Use native `fetch()` instead of axios ([#179](https://github.com/meyfa/recaptcha-promise/issues/179)) ([8c38cbf](https://github.com/meyfa/recaptcha-promise/commit/8c38cbf76bf4e8046dd54f1155e9dae0e69d9385))
+
 ## [3.0.2](https://github.com/meyfa/recaptcha-promise/compare/v3.0.1...v3.0.2) (2023-11-17)
 
 
