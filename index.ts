@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 /**
  * URL of the verification endpoint.
  */
@@ -85,11 +83,17 @@ function createInstance (config?: RecaptchaVerifierConfig): RecaptchaVerifier {
       response,
       remoteip: remoteAddress ?? ''
     }).toString()
-    const { data } = await axios.post(VERIFY_ENDPOINT, postBody, {
+    const postResponse = await fetch(VERIFY_ENDPOINT, {
+      method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
-      }
+      },
+      body: postBody
     })
+    const data = await postResponse.json()
+    if (data == null || typeof data !== 'object' || !('success' in data) || typeof data.success !== 'boolean') {
+      throw new Error('unexpected response')
+    }
     return data.success
   }
 
