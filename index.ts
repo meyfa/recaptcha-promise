@@ -24,7 +24,7 @@ export interface RecaptchaVerifier {
    * @param remoteAddress The user's remote address (if available).
    * @returns A Promise resolving to whether the response is correct.
    */
-  (response: any, remoteAddress?: string | undefined | null): Promise<boolean>
+  (response: any, remoteAddress?: string | null): Promise<boolean>
 
   /**
    * Verify a challenge-response.
@@ -33,7 +33,7 @@ export interface RecaptchaVerifier {
    * @param remoteAddress The user's remote address (if available).
    * @returns A Promise resolving to whether the response is correct.
    */
-  verify: (response: any, remoteAddress?: string | undefined | null) => Promise<boolean>
+  verify: (response: any, remoteAddress?: string | null) => Promise<boolean>
 
   /**
    * Configure (or re-configure) this instance.
@@ -74,7 +74,7 @@ function createInstance (config?: RecaptchaVerifierConfig): RecaptchaVerifier {
   let secret: string | undefined
 
   // this is returned directly, to allow function invocation
-  const verify = async (response: any, remoteAddress?: string | undefined | null): Promise<boolean> => {
+  const verify = async (response: any, remoteAddress?: string | null): Promise<boolean> => {
     if (secret == null) {
       throw new Error('secret not configured')
     }
@@ -102,6 +102,7 @@ function createInstance (config?: RecaptchaVerifierConfig): RecaptchaVerifier {
 
   // this is added to support (re-)configuration
   verify.init = (config: RecaptchaVerifierConfig) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (typeof config !== 'object' || config == null) {
       throw new Error('config object not provided')
     }
