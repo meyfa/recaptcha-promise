@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/meyfa/recaptcha-promise/compare/v3.1.0...v3.1.1) (2025-05-18)
+
+
+### Bug Fixes
+
+* Make commonjs type explicit in package.json ([#198](https://github.com/meyfa/recaptcha-promise/issues/198)) ([afc64f9](https://github.com/meyfa/recaptcha-promise/commit/afc64f9827efd17b1f5ae1e6e0c54d29d1e33387))
+
 ## [3.1.0](https://github.com/meyfa/recaptcha-promise/compare/v3.0.2...v3.1.0) (2024-07-21)
 
 
