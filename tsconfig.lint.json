@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.json",
+  "include": [
+    "eslint.config.mjs",
+    "index.ts",
+    "test/index.test.ts"
+  ],
   "exclude": [
     "dist",
     "node_modules"

@@ -25,23 +25,15 @@ This is the recommended way. First, an instance is created with your secret key.
 It can then be used to verify as many challenges as needed.
 
 ```js
-const recaptcha = require('recaptcha-promise').create({
+import recaptcha from 'recaptcha-promise'
+
+const instance = recaptcha.create({
   secret: 'YOUR_SECRET_KEY'
 })
 
 // In an HTTP handler:
-
-// ... with Promises:
-recaptcha.verify(userResponse).then(function (success) {
-  console.log(success ? 'Response valid' : 'Response invalid')
-})
-
-// ... or in an async context:
-async function handleRequest (userResponse) {
-  const success = await recaptcha.verify(userResponse)
-  console.log(success ? 'Response valid' : 'Response invalid')
-}
-handleRequest(/* ... */)
+const success = await instance.verify(userResponse)
+console.log(success ? 'Response valid' : 'Response invalid')
 ```
 
 ### The global instance
@@ -51,7 +43,7 @@ a custom object, you can configure this package with your secret key globally:
 
 ```js
 // note the missing .create(...) call
-const recaptcha = require('recaptcha-promise')
+import recaptcha from 'recaptcha-promise'
 
 recaptcha.init({
   secret: 'YOUR_SECRET_KEY' // secret_key and secretKey are also valid
