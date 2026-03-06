@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "node -e \"fs.rmSync('./dist',{force:true,recursive:true})\" && tsc",
-    "test": "mocha --require ts-node/register --recursive \"test/**/*.test.*\"",
+    "test": "node --test --require ts-node/register test/index.test.ts",
     "lint": "tsc --noEmit -p tsconfig.lint.json && eslint .",
     "lint-fix": "tsc --noEmit -p tsconfig.lint.json && eslint --fix .",
     "coverage": "c8 --reporter=text --reporter=lcov npm test",
@@ -35,11 +35,9 @@
   },
   "devDependencies": {
     "@meyfa/eslint-config": "8.0.1",
-    "@types/mocha": "10.0.10",
     "@types/node": "22.15.18",
     "c8": "10.1.3",
     "eslint": "9.27.0",
-    "mocha": "11.3.0",
     "ts-node": "10.9.2",
     "typescript": "5.8.3",
     "undici": "7.9.0"

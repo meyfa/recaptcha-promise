@@ -1,8 +1,10 @@
-import recaptcha from '../index.js'
 import assert from 'node:assert'
+import { afterEach, describe, it } from 'node:test'
 import { getGlobalDispatcher, MockAgent, MockPool, setGlobalDispatcher } from 'undici'
+import recaptcha from '../index.js'
 
-describe('main export', function () {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+describe('main export', async () => {
   const apiPath = '/recaptcha/api/siteverify'
   const matchAny = (): boolean => true
 
@@ -17,13 +19,13 @@ describe('main export', function () {
   const oldGlobalDispatcher = getGlobalDispatcher()
   afterEach(() => setGlobalDispatcher(oldGlobalDispatcher))
 
-  describe('#verify()', function () {
-    it('is aliased to the main export', function () {
+  await describe('#verify()', async () => {
+    await it('is aliased to the main export', () => {
       assert.strictEqual(recaptcha, recaptcha.verify)
       assert(typeof recaptcha === 'function', 'is not a function')
     })
 
-    it('rejects if unconfigured, does not perform requests', async function () {
+    await it('rejects if unconfigured, does not perform requests', async () => {
       const mockPool = createMockPool()
       let callCount = 0
       mockPool.intercept({ path: matchAny, method: matchAny }).reply(500, () => {
@@ -35,7 +37,7 @@ describe('main export', function () {
       assert.strictEqual(callCount, 0)
     })
 
-    it('performs a request with correct body if configured', async function () {
+    await it('performs a request with correct body if configured', async () => {
       const mockPool = createMockPool()
       recaptcha.init({ secret: 'test-secret' })
       let callCount = 0
@@ -52,7 +54,7 @@ describe('main export', function () {
       assert.strictEqual(callCount, 1)
     })
 
-    it('does not pass remoteip if left out', async function () {
+    await it('does not pass remoteip if left out', async () => {
       const mockPool = createMockPool()
       recaptcha.init({ secret: 'test-secret' })
       let callCount = 0
@@ -65,7 +67,7 @@ describe('main export', function () {
       assert.strictEqual(callCount, 1)
     })
 
-    it('resolves with success value', async function () {
+    await it('resolves with success value', async () => {
       const mockPool = createMockPool()
       recaptcha.init({ secret: 'test-secret' })
       // case 1
@@ -81,8 +83,8 @@ describe('main export', function () {
     })
   })
 
-  describe('#init()', function () {
-    it('throws if passed nothing or not an object', function () {
+  await describe('#init()', async () => {
+    await it('throws if passed nothing or not an object', () => {
       // @ts-expect-error - intentionally pass invalid values
       assert.throws(() => recaptcha.init())
       // @ts-expect-error - intentionally pass invalid values
@@ -91,11 +93,11 @@ describe('main export', function () {
       assert.throws(() => recaptcha.init('foo'))
     })
 
-    it('does not throw if given an object', function () {
+    await it('does not throw if given an object', () => {
       assert.doesNotThrow(() => recaptcha.init({ secret: 'foo' }))
     })
 
-    it('does not distinguish between secret, secretKey, secret_key', async function () {
+    await it('does not distinguish between secret, secretKey, secret_key', async () => {
       const mockPool = createMockPool()
       // case 1
       recaptcha.init({ secret: 'secret' })
@@ -123,26 +125,26 @@ describe('main export', function () {
     })
   })
 
-  describe('#create()', function () {
-    it('allows creation of unconfigured instances', function () {
+  await describe('#create()', async () => {
+    await it('allows creation of unconfigured instances', () => {
       assert.doesNotThrow(() => recaptcha.create())
     })
 
-    it('leaves global instance unchanged', async function () {
+    await it('leaves global instance unchanged', async () => {
       // @ts-expect-error - intentionally pass undefined
       recaptcha.init({ secret: undefined }) // reset secret
       recaptcha.create({ secret: 'test-secret' })
       await assert.rejects(async () => await recaptcha.verify('foo'))
     })
 
-    describe('#verify()', function () {
-      it('is aliased to the return value', function () {
+    await describe('#verify()', async () => {
+      await it('is aliased to the return value', () => {
         const obj = recaptcha.create()
         assert.strictEqual(obj.verify, obj)
         assert(typeof obj === 'function', 'is not a function')
       })
 
-      it('rejects if unconfigured, does not perform requests', async function () {
+      await it('rejects if unconfigured, does not perform requests', async () => {
         const mockPool = createMockPool()
         let callCount = 0
         mockPool.intercept({ path: matchAny, method: matchAny }).reply(500, () => {
@@ -153,7 +155,7 @@ describe('main export', function () {
         assert.strictEqual(callCount, 0)
       })
 
-      it('is independent between instances', async function () {
+      await it('is independent between instances', async () => {
         const mockPool = createMockPool()
 
         // @ts-expect-error - intentionally pass undefined
@@ -183,8 +185,8 @@ describe('main export', function () {
       })
     })
 
-    describe('#init()', function () {
-      it('throws if passed nothing or not an object', function () {
+    await describe('#init()', async () => {
+      await it('throws if passed nothing or not an object', () => {
         const obj = recaptcha.create()
         // @ts-expect-error - intentionally pass invalid values
         assert.throws(() => obj.init())
@@ -194,12 +196,12 @@ describe('main export', function () {
         assert.throws(() => obj.init('foo'))
       })
 
-      it('does not throw if given an object', function () {
+      await it('does not throw if given an object', () => {
         const obj = recaptcha.create()
         assert.doesNotThrow(() => obj.init({ secret: 'foo' }))
       })
 
-      it('allows re-configuration', async function () {
+      await it('allows re-configuration', async () => {
         const mockPool = createMockPool()
         const obj = recaptcha.create()
         obj.init({ secret: 'test-secret' })
