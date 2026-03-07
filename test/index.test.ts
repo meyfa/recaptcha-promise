@@ -1,7 +1,22 @@
 import assert from 'node:assert'
+import { Readable } from 'node:stream'
 import { afterEach, describe, it } from 'node:test'
-import { getGlobalDispatcher, MockAgent, MockPool, setGlobalDispatcher } from 'undici'
+import { getGlobalDispatcher, MockAgent, MockPool, setGlobalDispatcher, type BodyInit } from 'undici'
 import recaptcha from '../index.js'
+
+function bodyToString (body: Buffer | BodyInit | Readable | null | undefined): string {
+  if (body == null) {
+    return ''
+  } else if (Buffer.isBuffer(body)) {
+    return body.toString()
+  } else if (typeof body === 'string') {
+    return body
+  } else if (body instanceof Uint8Array) {
+    return Buffer.from(body).toString()
+  }
+
+  throw new Error('Unsupported body type')
+}
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 describe('main export', async () => {
@@ -45,7 +60,7 @@ describe('main export', async () => {
         ++callCount
         assert.strictEqual(config.path, '/recaptcha/api/siteverify')
         assert.strictEqual(config.method, 'POST')
-        assert.strictEqual(config.body?.toString(), 'secret=test-secret&response=foo&remoteip=bar')
+        assert.strictEqual(bodyToString(config.body), 'secret=test-secret&response=foo&remoteip=bar')
         const contentType = config.headers != null ? new Headers(config.headers).get('Content-Type') : undefined
         assert.strictEqual(contentType, 'application/x-www-form-urlencoded')
         return { success: true }
@@ -60,7 +75,7 @@ describe('main export', async () => {
       let callCount = 0
       mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
         ++callCount
-        assert.strictEqual(config.body?.toString(), 'secret=test-secret&response=foo&remoteip=')
+        assert.strictEqual(bodyToString(config.body), 'secret=test-secret&response=foo&remoteip=')
         return { success: true }
       })
       await recaptcha.verify('foo')
@@ -102,7 +117,7 @@ describe('main export', async () => {
       // case 1
       recaptcha.init({ secret: 'secret' })
       mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
-        assert.strictEqual(config.body?.toString(), 'secret=secret&response=foo&remoteip=bar')
+        assert.strictEqual(bodyToString(config.body), 'secret=secret&response=foo&remoteip=bar')
         return { success: true }
       })
       await recaptcha.verify('foo', 'bar')
@@ -110,7 +125,7 @@ describe('main export', async () => {
       // case 2
       recaptcha.init({ secretKey: 'secretKey' } as any)
       mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
-        assert.strictEqual(config.body?.toString(), 'secret=secretKey&response=foo&remoteip=bar')
+        assert.strictEqual(bodyToString(config.body), 'secret=secretKey&response=foo&remoteip=bar')
         return { success: true }
       })
       await recaptcha.verify('foo', 'bar')
@@ -118,7 +133,7 @@ describe('main export', async () => {
       // case 2
       recaptcha.init({ secret_key: 'secret_key' } as any)
       mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
-        assert.strictEqual(config.body?.toString(), 'secret=secret_key&response=foo&remoteip=bar')
+        assert.strictEqual(bodyToString(config.body), 'secret=secret_key&response=foo&remoteip=bar')
         return { success: true }
       })
       await recaptcha.verify('foo', 'bar')
@@ -167,7 +182,7 @@ describe('main export', async () => {
         let callCount1 = 0
         mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
           ++callCount1
-          assert.strictEqual(config.body?.toString(), 'secret=secret1&response=foo1&remoteip=bar1')
+          assert.strictEqual(bodyToString(config.body), 'secret=secret1&response=foo1&remoteip=bar1')
           return { success: true }
         })
         await instance1.verify('foo1', 'bar1')
@@ -177,7 +192,7 @@ describe('main export', async () => {
         let callCount2 = 0
         mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
           ++callCount2
-          assert.strictEqual(config.body?.toString(), 'secret=secret2&response=foo2&remoteip=bar2')
+          assert.strictEqual(bodyToString(config.body), 'secret=secret2&response=foo2&remoteip=bar2')
           return { success: true }
         })
         await instance2.verify('foo2', 'bar2')
@@ -208,7 +223,7 @@ describe('main export', async () => {
         let callCount = 0
         mockPool.intercept({ path: apiPath, method: 'POST' }).reply(200, (config) => {
           ++callCount
-          assert.strictEqual(config.body?.toString(), 'secret=test-secret&response=foo&remoteip=bar')
+          assert.strictEqual(bodyToString(config.body), 'secret=test-secret&response=foo&remoteip=bar')
           return { success: true }
         })
         await obj.verify('foo', 'bar')
