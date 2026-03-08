@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.0.0](https://github.com/meyfa/recaptcha-promise/compare/v3.1.1...v4.0.0) (2026-03-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* Migrate to ESM-only library ([#229](https://github.com/meyfa/recaptcha-promise/issues/229))
+* Require Node.js 22.18.0 or later ([#227](https://github.com/meyfa/recaptcha-promise/issues/227))
+
+### Miscellaneous Chores
+
+* Migrate to ESM-only library ([#229](https://github.com/meyfa/recaptcha-promise/issues/229)) ([37dd897](https://github.com/meyfa/recaptcha-promise/commit/37dd89780bcf1b485e7ca5a5a2e400954ddafd21))
+* Require Node.js 22.18.0 or later ([#227](https://github.com/meyfa/recaptcha-promise/issues/227)) ([bba578e](https://github.com/meyfa/recaptcha-promise/commit/bba578ee4c9e734345a8b3e1e077194b3f431995))
+
 ## [3.1.1](https://github.com/meyfa/recaptcha-promise/compare/v3.1.0...v3.1.1) (2026-03-06)
 
 
