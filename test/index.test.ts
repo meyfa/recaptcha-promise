@@ -2,7 +2,7 @@ import assert from 'node:assert'
 import { Readable } from 'node:stream'
 import { afterEach, describe, it } from 'node:test'
 import { getGlobalDispatcher, MockAgent, MockPool, setGlobalDispatcher, type BodyInit } from 'undici'
-import recaptcha from '../index.js'
+import recaptcha from '../index.ts'
 
 function bodyToString (body: Buffer | BodyInit | Readable | null | undefined): string {
   if (body == null) {
